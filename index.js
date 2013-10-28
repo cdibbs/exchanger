@@ -24,6 +24,11 @@ exports.initialize = function(settings, callback) {
 
     exports.client = client;
     exports.client.setSecurity(new soap.BasicAuthSecurity(settings.username, settings.password));
+    if (settings.impersonate) {
+      exports.client.addSoapHeader( {
+        ExchangeImpersonation : { ConnectingSID : { PrincipalName : settings.impersonate } }
+        }, '', 't', 'http://schemas.microsoft.com/exchange/services/2006/messages');
+    }
 
     return callback(null);
   }, endpoint);
